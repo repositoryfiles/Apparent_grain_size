@@ -190,3 +190,10 @@ while True:
     if key != 255 or cv2.getWindowProperty('Result', cv2.WND_PROP_VISIBLE) !=  1:
         break
 cv2.destroyAllWindows()
+
+# 終了時の画像の保存（画像ファイル名＋_resultで同じフォルダに保存）
+src = fname
+idx = src.rfind(r".")
+result_filename = (src[:idx] + "_result." + src[idx + 1 :])
+cv2.imwrite(result_filename, copy_img_color)
+
