@@ -44,3 +44,7 @@ windowに表示されている画像は、読み込んだ画像ファイルと�
 - VSC 1.85.2
 - Python 3.9.18
 - OpenCV 4.5.0
+
+## Pythonファイルについて
+GrainSize.py 初期バージョン
+GrainSize_2.py 改良バージョン
