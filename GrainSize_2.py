@@ -14,8 +14,6 @@ n = 0
 AddPoints = 0
 DeletePoints = 0
 
-
-
 #PhotoPictureWidthとPhotoMagnificationは撮影環境により変わるため、組織画像に合致した値に設定すること！
 # 下は、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
 PhotoPictureWidth = 142 #画像の幅（撮影倍率で表示時の画像の幅）
@@ -74,7 +72,6 @@ def DrawFigure():
         cv2.circle(copy_img_color, (_pt[1], _pt[0]), int(Width/100), (255,0,0), thickness=2) #円描画
 
     points_num = len(pts)
-    #cv2.putText(copy_img_color, "Number of grain boundary : " + str(len(pt)) , (int(Width/20), int(Height/15)), cv2.FONT_HERSHEY_PLAIN, Height/400, (255, 255, 255), 2, cv2.LINE_AA)
 
     point_num_per_1mm = points_num / (500 / Magnification)
 	# G0551の式A.11と式A.14の関係を使用（A.11からG(ASTM)を求め、それA.14を使ってGに変換）
@@ -83,6 +80,8 @@ def DrawFigure():
     print(f'Number of grain boundaries : {points_num}')
     print(f'Number of grain boundaries per 1 mm : {point_num_per_1mm:.1f}')
     print(f'Apparent grain size : {grain_number :.1f}')
+    #cv2.putText(copy_img_color, "Apparent grain size : " + f'{grain_number :.1f}' , (int(Width/20), int(Height/15)), cv2.FONT_HERSHEY_PLAIN, Height/400, (0, 0, 255), 2, cv2.LINE_AA)
+
     cv2.namedWindow("Result", 16) #組織画像のwindow内で右クリックのメニューを非表示にする
     cv2.imshow("Result", copy_img_color)
 
