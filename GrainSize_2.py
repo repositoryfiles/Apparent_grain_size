@@ -186,3 +186,4 @@ src = fname
 idx = src.rfind(r".")
 result_filename = (src[:idx] + "_result." + src[idx + 1 :])
 cv2.imwrite(result_filename, copy_img_color)
+
