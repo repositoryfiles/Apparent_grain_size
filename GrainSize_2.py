@@ -58,7 +58,7 @@ def callback(event, x, y, flags, param):
             DeletePoints = DeletePoints + 1
         DrawFigure()
 
-試験線と粒界位置を更新描画
+# 試験線と粒界位置を更新描画
 def DrawFigure():
 
     global img_color, copy_img_color
@@ -101,17 +101,13 @@ def generate_testline_point():
         y1 = int(center_y + Radius1*Width * math.sin(theata_rad))
         testline_pts.append([y1, x1])
 
-    for i in range(360):
-        theata_rad = i * math.pi/180
-        x1 = int(center_x + Radius2*Width * math.cos(theata_rad))
-        y1 = int(center_y + Radius2*Width * math.sin(theata_rad))
-        testline_pts.append([y1, x1])
+        x2 = int(center_x + Radius2*Width * math.cos(theata_rad))
+        y2 = int(center_y + Radius2*Width * math.sin(theata_rad))
+        testline_pts.append([y2, x2])
 
-    for i in range(360):
-        theata_rad = i * math.pi/180
-        x1 = int(center_x + Radius3*Width * math.cos(theata_rad))
-        y1 = int(center_y + Radius3*Width * math.sin(theata_rad))
-        testline_pts.append([y1, x1])
+        x3 = int(center_x + Radius3*Width * math.cos(theata_rad))
+        y3 = int(center_y + Radius3*Width * math.sin(theata_rad))
+        testline_pts.append([y3, x3])
 
 #ファイル選択（c:\Dataの拡張子jpgを開く場合）
 root=tkinter.Tk()
