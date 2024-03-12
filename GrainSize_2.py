@@ -14,14 +14,14 @@ n = 0
 AddPoints = 0
 DeletePoints = 0
 
-# PictureWidthとMagnificationは組織画像に合致した値に設定すること！
+# PhotoPictureWidthとPhotoMagnificationは組織画像に合致した値に設定すること！
 # 下は、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
-#PictureWidth = 142 #画像の幅（単位：mm）
 PhotoPictureWidth = 142 #画像の幅（撮影倍率で表示時の画像の幅）
 PhotoMagnification = 1000 #撮影倍率
-Magnification = 1200 #解析時の倍率
+#PictureWidth = 142 #画像の幅（単位：mm）
+#Magnification = 1200 #解析時の倍率
 Width=640#表示させる画像の幅（高さは元画像から計算）
-AnalysisPictureHeight=140 #解析時の画像の幅（解析時の倍率で表示したときの画像の幅）
+AnalysisPictureHeight=140 #解析時の画像の高さ（解析時の倍率で表示したときの画像の高さ）
 
 #3つの円の半径の初期値
 Radius1 = 0.280
@@ -39,7 +39,7 @@ def callback(event, x, y, flags, param):
             #クリック位置(x,y)とtestline_ptsとの距離を求める
             #distance = math.sqrt(math.pow((x - _pt[1]), 2) + math.pow((y - _pt[0]), 2))
             #print(distance)
-            if math.sqrt(math.pow((x - testline_pt[1]), 2) + math.pow((y - testline_pt[0]), 2)) < 2:
+            if math.sqrt(math.pow((x - testline_pt[1]), 2) + math.pow((y - testline_pt[0]), 2)) < 4:
                 pts.append([y, x])
                 n = n + 1
                 AddPoints = AddPoints + 1
@@ -97,8 +97,8 @@ def generate_testline_point():
     center_x = int(Width / 2)
     center_y = int(Height / 2)
 
-    for i in range(360):
-        theata_rad = i * math.pi/180
+    for i in range(90):
+        theata_rad = 4 * i * math.pi/180
         x1 = int(center_x + Radius1*Width * math.cos(theata_rad))
         y1 = int(center_y + Radius1*Width * math.sin(theata_rad))
         testline_pts.append([y1, x1])
