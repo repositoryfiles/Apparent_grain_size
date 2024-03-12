@@ -16,15 +16,17 @@ DeletePoints = 0
 
 # PictureWidthとMagnificationは組織画像に合致した値に設定すること！
 # 下は、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
-PictureWidth = 142 #画像の幅（単位：mm）
-Magnification = 1000 #撮影倍率
-miniGraSize=10/PictureWidth #（認識させる最小サイズ）/（画像の幅）
+#PictureWidth = 142 #画像の幅（単位：mm）
+PhotoPictureWidth = 142 #画像の幅（撮影倍率で表示時の画像の幅）
+PhotoMagnification = 1000 #撮影倍率
+Magnification = 1200 #解析時の倍率
 Width=640#表示させる画像の幅（高さは元画像から計算）
+AnalysisPictureHeight=140 #解析時の画像の幅（解析時の倍率で表示したときの画像の幅）
 
-Radius1 = 79.58/2/PictureWidth
-Radius2 = 53.05/2/PictureWidth
-Radius3 = 26.53/2/PictureWidth
-
+#3つの円の半径の初期値
+Radius1 = 0.280
+Radius2 = 0.187
+Radius3 = 0.0934
 
 #マウスの左右ボタンがクリックされたときの処理
 def callback(event, x, y, flags, param):
@@ -127,6 +129,19 @@ Height=int(Width*img_height/img_width)
 img_color = cv2.resize(img_color, (Width, Height))
 img_gray = cv2.resize(img_gray, (Width, Height))
 
+#ここに、解析用の画像の幅と倍率の計算処理を入れる
+PhotoPictureHeight = PhotoPictureWidth * img_height/img_width
+Magnification = (AnalysisPictureHeight/PhotoPictureHeight)*PhotoMagnification
+PictureWidth = PhotoPictureWidth * Magnification / PhotoMagnification
+PictureHeight = PictureWidth * img_height/img_width
+miniGraSize=10/PictureWidth #（認識させる最小サイズ）/（画像の幅）
+
+Radius1 = 79.58/2/PictureWidth
+Radius2 = 53.05/2/PictureWidth
+Radius3 = 26.53/2/PictureWidth
+miniGraSize=10/PictureWidth #（認識させる最小サイズ）/（画像の幅）
+
+
 #リサイズ後のimg_colorのクローン
 copy_img_color = img_color.copy()
 
@@ -141,7 +156,7 @@ contours1 = [e for e in contours if int(Width * miniGraSize)  > int(cv2.minEnclo
 cv2.drawContours(img_gray_inv_binary, contours1, -1, (0, 0, 0), -1)
 
 Flag1 = 0
-Flag1_1 = 0
+Flag2 = 0
 
 # 試験線の座標値を抽出
 generate_testline_point()
@@ -153,13 +168,11 @@ for testline_pt in testline_pts:
     kido = img_gray_inv_binary[y1, x1]
     if kido == 255 :
         Flag1 = 1
-        if Flag1 == 1 and Flag1_1 == 0:
+        if Flag1 == 1 and Flag2 == 0:
             pts.append(testline_pt)
-    elif kido != 255 :
+    else:
         Flag1 = 0
-    else :
-        continue
-    Flag1_1 = Flag1
+    Flag2 = Flag1
 
 # 試験線と粒界位置を描画
 DrawFigure()
