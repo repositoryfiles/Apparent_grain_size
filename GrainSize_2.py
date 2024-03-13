@@ -1,5 +1,5 @@
 # coding: utf-8
-#ライブラリのインポート
+# ライブラリのインポート
 import cv2
 import tkinter
 from tkinter import filedialog
@@ -14,14 +14,14 @@ n = 0
 AddPoints = 0
 DeletePoints = 0
 
-#PhotoPictureWidthとPhotoMagnificationは撮影環境により変わるため、組織画像に合致した値に設定すること！
-# 下は、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
+# PhotoPictureWidthとPhotoMagnificationは撮影環境により変わるため、組織画像に合致した値に設定すること！
+# 以下のPhotoPictureWidthとPhotoMagnificationは、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
 PhotoPictureWidth = 142 #画像の幅（撮影倍率で表示時の画像の幅）
 PhotoMagnification = 1000 #撮影倍率
 
-#下の二つの値は変えなくてよい
-Width=640#表示させる画像の幅（高さは元画像から計算）
-AnalysisPictureHeight=140 #解析時の画像の高さ（解析時の倍率で表示したときの画像の高さ）
+# 次の二つの値は変えなくてよい
+Width=640 #画像のデフォルトの表示幅（高さは元画像から計算）、ディスプレイで見やすい大きさに設定
+AnalysisPictureHeight=140 #解析時の画像の高さ（解析時の倍率で表示したときの画像の高さ：単位mm）
 
 #マウスの左右ボタンがクリックされたときの処理
 def callback(event, x, y, flags, param):
@@ -42,7 +42,7 @@ def callback(event, x, y, flags, param):
     if event == cv2.EVENT_RBUTTONDOWN:
         flag = 0
         i = 0
-        #pt[]からクリック位置に近い点を探す
+        #ptsからクリック位置に近い点を探す
         for pt in pts:
             if abs(pt[0] - y) < 5 and abs(pt[1] - x) < 5:
                 point = i
@@ -76,7 +76,7 @@ def DrawFigure():
     point_num_per_1mm = points_num / (500 / Magnification)
 	# G0551の式A.11と式A.14の関係を使用（A.11からG(ASTM)を求め、それA.14を使ってGに変換）
     grain_number = -3.3335 + 6.6439 * math.log10(point_num_per_1mm)
-    print(f'Magnification (for picture height = 140 mm): {Magnification:.0f}')
+    print(f'\nMagnification (for picture height = {AnalysisPictureHeight:.0f} mm): {Magnification:.0f}')
     print(f'Number of grain boundaries : {points_num}')
     print(f'Number of grain boundaries per 1 mm : {point_num_per_1mm:.1f}')
     print(f'Apparent grain size : {grain_number :.1f}')
@@ -92,16 +92,20 @@ def generate_testline_point():
     center_x = int(Width / 2)
     center_y = int(Height / 2)
 
-    for i in range(90):
-        theata_rad = 4 * i * math.pi/180
+    for i in range(180):
+        theata_rad = 2 * i * math.pi/180
         x1 = int(center_x + Radius1*Width * math.cos(theata_rad))
         y1 = int(center_y + Radius1*Width * math.sin(theata_rad))
         testline_pts.append([y1, x1])
 
+    for i in range(120):
+        theata_rad = 3 * i * math.pi/180
         x2 = int(center_x + Radius2*Width * math.cos(theata_rad))
         y2 = int(center_y + Radius2*Width * math.sin(theata_rad))
         testline_pts.append([y2, x2])
 
+    for i in range(90):
+        theata_rad = 4 * i * math.pi/180
         x3 = int(center_x + Radius3*Width * math.cos(theata_rad))
         y3 = int(center_y + Radius3*Width * math.sin(theata_rad))
         testline_pts.append([y3, x3])
