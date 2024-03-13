@@ -13,6 +13,8 @@ testline_pts = []
 n = 0
 AddPoints = 0
 DeletePoints = 0
+#Method = 'Circles' # 'Circles' または 'Lines' を指定
+Method = 'Lines' # 'Circles' または 'Lines' を指定
 
 # PhotoPictureWidthとPhotoMagnificationは撮影環境により変わるため、組織画像に合致した値に設定すること！
 # 以下のPhotoPictureWidthとPhotoMagnificationは、画像を幅142mmで表示すると、倍率1000倍の組織画像になるという設定である
@@ -64,9 +66,16 @@ def DrawFigure():
     center_x = int(Width / 2)
     center_y = int(Height / 2)
 
-    cv2.circle(copy_img_color, (center_x, center_y), int(Radius1*Width), (0,0,255), thickness=2) #円描画
-    cv2.circle(copy_img_color, (center_x, center_y), int(Radius2*Width), (0,0,255), thickness=2) #円描画
-    cv2.circle(copy_img_color, (center_x, center_y), int(Radius3*Width), (0,0,255), thickness=2) #円描画
+    if Method == 'Circles':
+        cv2.circle(copy_img_color, (center_x, center_y), int(Radius1*Width), (0,0,255), thickness=2) #円描画
+        cv2.circle(copy_img_color, (center_x, center_y), int(Radius2*Width), (0,0,255), thickness=2) #円描画
+        cv2.circle(copy_img_color, (center_x, center_y), int(Radius3*Width), (0,0,255), thickness=2) #円描画
+
+    elif Method == 'Lines':
+        cv2.line(copy_img_color, (int((PictureWidth/2 - 60)/PictureWidth*Width), int((20)/PictureHeight*Height)), (int((PictureWidth/2 - 60)/PictureWidth*Width), int((70-50 + 100)/PictureHeight*Height)), (0,0,255), thickness=2, lineType=cv2.LINE_8, shift=0)
+        cv2.line(copy_img_color, (int((PictureWidth/2 - 50)/PictureWidth*Width), int((130)/PictureHeight*Height)), (int((PictureWidth/2 + 50)/PictureWidth*Width), int((130)/PictureHeight*Height)), (0,0,255), thickness=2, lineType=cv2.LINE_8, shift=0)
+        cv2.line(copy_img_color, (int((PictureWidth/2 - 50)/PictureWidth*Width), int((20)/PictureHeight*Height)), (int((PictureWidth/2 + 50)/PictureWidth*Width), int((70-50 + 100)/PictureHeight*Height)), (0,0,255), thickness=2, lineType=cv2.LINE_8, shift=0)
+        cv2.line(copy_img_color, (int((PictureWidth/2 - 50)/PictureWidth*Width), int((120)/PictureHeight*Height)), (int((PictureWidth/2 + 50)/PictureWidth*Width), int((70+50 - 100)/PictureHeight*Height)), (0,0,255), thickness=2, lineType=cv2.LINE_8, shift=0)
 
     for _pt in pts:
         cv2.circle(copy_img_color, (_pt[1], _pt[0]), int(Width/100), (255,0,0), thickness=2) #円描画
@@ -89,26 +98,49 @@ def DrawFigure():
 def generate_testline_point():
 
     global testline_pts
-    center_x = int(Width / 2)
-    center_y = int(Height / 2)
+    if Method == 'Circles':
+        center_x = int(Width / 2)
+        center_y = int(Height / 2)
 
-    for i in range(180):
-        theata_rad = 2 * i * math.pi/180
-        x1 = int(center_x + Radius1*Width * math.cos(theata_rad))
-        y1 = int(center_y + Radius1*Width * math.sin(theata_rad))
-        testline_pts.append([y1, x1])
+        for i in range(180):
+            theata_rad = 2 * i * math.pi/180
+            x1 = int(center_x + Radius1*Width * math.cos(theata_rad))
+            y1 = int(center_y + Radius1*Width * math.sin(theata_rad))
+            testline_pts.append([y1, x1])
 
-    for i in range(120):
-        theata_rad = 3 * i * math.pi/180
-        x2 = int(center_x + Radius2*Width * math.cos(theata_rad))
-        y2 = int(center_y + Radius2*Width * math.sin(theata_rad))
-        testline_pts.append([y2, x2])
+        for i in range(120):
+            theata_rad = 3 * i * math.pi/180
+            x2 = int(center_x + Radius2*Width * math.cos(theata_rad))
+            y2 = int(center_y + Radius2*Width * math.sin(theata_rad))
+            testline_pts.append([y2, x2])
 
-    for i in range(90):
-        theata_rad = 4 * i * math.pi/180
-        x3 = int(center_x + Radius3*Width * math.cos(theata_rad))
-        y3 = int(center_y + Radius3*Width * math.sin(theata_rad))
-        testline_pts.append([y3, x3])
+        for i in range(90):
+            theata_rad = 4 * i * math.pi/180
+            x3 = int(center_x + Radius3*Width * math.cos(theata_rad))
+            y3 = int(center_y + Radius3*Width * math.sin(theata_rad))
+            testline_pts.append([y3, x3])
+
+    elif Method == 'Lines':
+        for i in range(100):
+            x1 = int((PictureWidth/2 - 60)/PictureWidth*Width)
+            y1 = int((20 + i)/PictureHeight*Height)
+            testline_pts.append([y1, x1])
+
+        for i in range(100):
+            x2 = int((PictureWidth/2 - 50 + i)/PictureWidth*Width)
+            y2 = int((130)/PictureHeight*Height)
+            testline_pts.append([y2, x2])
+
+        for i in range(100):
+            x3 = int((PictureWidth/2 - 50 + i)/PictureWidth*Width)
+            y3 = int((20 + i)/PictureHeight*Height)
+            testline_pts.append([y3, x3])
+
+        for i in range(100):
+            x4 = int((PictureWidth/2 - 50 + i)/PictureWidth*Width)
+            y4 = int((120 - i)/PictureHeight*Height)
+            testline_pts.append([y4, x4])
+
 
 #ファイル選択（c:\Dataの拡張子jpgを開く場合）
 root=tkinter.Tk()
